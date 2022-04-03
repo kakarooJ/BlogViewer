@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Blog Viewer</string>
+    <string name="setting">설정</string>
+    <string name="reset_list">검색결과 지움</string>
+    <string name="title_activity_settings">설정</string>
+    <string name="editor_text">PageNo or 검색어</string>
+
+    <!-- Preference Titles -->
+    <string name="category_header">URL 카테고리</string>
+    <string name="category_tag">TAG 카테고리</string>
+    <string name="category_page">PAGE 카테고리</string>
+
+    <!-- keyword Preferences -->
+    <string name="blog_url">URL</string>
+
+    <!-- tag Preferences -->
+    <string name="article_tag_name">main article tag</string>
+    <string name="category_tag_name">category tag</string>
+    <string name="link_tag_name">article link tag</string>
+    <string name="title_tag_name">title tag</string>
+    <string name="date_tag_name">date tag</string>
+    <string name="image_tag_name">image tag</string>
+    <string name="summary_tag_name">summary tag</string>
+
+    <string name="article_maxnum">가져올 PAGE 최대 수</string>
+
+
+</resources>
