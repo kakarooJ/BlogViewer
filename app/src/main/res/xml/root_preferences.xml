@@ -67,16 +67,6 @@
             app:summary=".summary"
             app:iconSpaceReserved="false"/>
 
-<!--        <ListPreference
-            app:defaultValue="0"
-            app:entries="@array/engine_items"
-            app:entryValues="@array/engine_values"
-            app:key="engine_key"
-            app:title="@string/search_engine"
-            app:useSimpleSummaryProvider="true"
-            app:iconSpaceReserved="false"/>
--->
-
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/category_page"

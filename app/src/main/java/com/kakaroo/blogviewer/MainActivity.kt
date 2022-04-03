@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
                             //Log.d(Common.MY_TAG, "pre: asyncTryCnt[$asyncTryCnt]")
                             binding.btSearch.isEnabled = false
 
-                            CoroutineScope()
+                            //CoroutineScope()
 
                             val jsoupAsyncTask =
                                 JSoupParser(url, uriTag, articlesTag, object : onPostExecuteListener {
