@@ -20,7 +20,9 @@ object Common {
 
     const val ARTICLE_URL       = 0
 
-    val REQUEST_INTERNET_PERMISSION     =   10
+    const val REQUEST_INTERNET_PERMISSION   =   10
+
+    const val HTTP_CRAWLING_TIMEOUT_MILLIS  =   5000L
 
     //const val SUBJECT_VIEW = 1
     //const val ARTICLE_VIEW = 2

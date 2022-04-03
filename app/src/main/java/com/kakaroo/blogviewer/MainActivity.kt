@@ -25,6 +25,11 @@ import com.kakaroo.blogviewer.entity.Category
 import com.kakaroo.blogviewer.html.JSoupParser
 import com.kakaroo.blogviewer.utility.Common
 import com.kakaroo.blogviewer.utility.MyUtility
+import kotlinx.coroutines.*
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -129,6 +134,7 @@ class MainActivity : AppCompatActivity() {
 
                         //검색결과 구하기
                         var searchType = Common.EditorInputType.NONE
+
                         val searchStr = binding.etKeyword.text.toString()
                         if(binding.etKeyword.text.isNotEmpty()) {
                             searchType = if(isNumber(searchStr)) Common.EditorInputType.PAGE else Common.EditorInputType.SEARCH
@@ -171,13 +177,72 @@ class MainActivity : AppCompatActivity() {
                             //Log.d(Common.MY_TAG, "pre: asyncTryCnt[$asyncTryCnt]")
                             binding.btSearch.isEnabled = false
 
-                            //CoroutineScope()
+                            CoroutineScope(Dispatchers.IO).launch {
 
-                            val jsoupAsyncTask =
+                                try {
+                                    withTimeout(Common.HTTP_CRAWLING_TIMEOUT_MILLIS) {
+                                        //Log.e(Common.MY_TAG, "Force to stop dueto Coroutine's Timeout")
+                                        val coroutine = async {
+                                            executeCrawling(url, uriTag, articlesTag) }
+
+                                        val result = coroutine.await()
+                                        //Log.e(Common.MY_TAG, "asyncTryCnt[$asyncTryCnt], pageIndex[$pageIndex], result size is ${result.size}")
+
+                                        asyncTryCnt--
+                                        mArticleList.addAll(result)
+
+                                        mArticleList.sortWith(compareByDescending<Article> {it.date})
+
+                                        if(searchType == Common.EditorInputType.NONE)
+                                            mCategoryList.clear()
+
+                                        val mapList = mArticleList.groupBy { it.categoryName }
+                                        //Log.i(Common.MY_TAG, mapList.toString())
+
+                                        mapList.forEach{ item -> mCategoryList.add(Category(item.key,
+                                            item.value as ArrayList<Article>
+                                        ))}
+
+                                        withContext(Dispatchers.Main) {
+                                            mAdapter.notifyDataSetChanged()
+
+                                            if(asyncTryCnt == 0) {
+                                                Log.d(Common.MY_TAG, "btSearch is enabled")
+                                                binding.btSearch.isEnabled = true
+                                            }
+
+                                            if (result.size == 0 && mCategoryList.isEmpty()) {
+                                                bComplete = true
+                                                if(searchType != Common.EditorInputType.NONE) {
+                                                    Toast.makeText(
+                                                        applicationContext,
+                                                        "게시글이 없습니다.!!",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+                                        }
+                                    }
+                                } catch(te: TimeoutCancellationException) {
+                                    Log.e(Common.MY_TAG, "Timetout!!! - asyncTryCnt[$asyncTryCnt], pageIndex[$pageIndex]")
+                                    withContext(Dispatchers.Main) {
+                                        binding.btSearch.isEnabled = true
+                                        bComplete = true
+
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "시간 초과",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+
+                            /*val jsoupAsyncTask =
                                 JSoupParser(url, uriTag, articlesTag, object : onPostExecuteListener {
                                     override fun onPostExecute(
                                         result: ArrayList<Article>,
-                                        /*categorySet: MutableSet<String>,*/
+                                        *//*categorySet: MutableSet<String>,*//*
                                         bError: Boolean
                                     ) {
                                         asyncTryCnt--
@@ -203,7 +268,7 @@ class MainActivity : AppCompatActivity() {
                                             Log.d(Common.MY_TAG, "btSearch is enabled")
                                             binding.btSearch.isEnabled = true
                                         }
-                                        
+
                                         runOnUiThread {
                                             if (result.size == 0 && mCategoryList.isEmpty()) {
                                                 Toast.makeText(
@@ -216,13 +281,51 @@ class MainActivity : AppCompatActivity() {
                                         }
                                     }
                                 })
-                            jsoupAsyncTask.execute()
+                            jsoupAsyncTask.execute()*/
                         } while(!bComplete && pageIndex < pageMaxNumInt)
                     }
                 }
             }
         }
     }
+
+    //코루틴 내부에서 실행되는 함수는 suspend로 감싸줘야 함
+    private suspend fun executeCrawling(url: String, uriTag: String, articlesTag: ArticlesTag): ArrayList<Article> {
+        var articleList = ArrayList<Article>()
+
+        try {
+            val doc: Document = Jsoup.connect(url+uriTag)
+                .ignoreContentType(true)
+                .get()
+
+            //Log.i(Common.MY_TAG, doc.toString())
+
+            val contentElements: Elements = doc.select(articlesTag.articleTag)
+            for ((i, elem) in contentElements.withIndex()) {
+                val category = elem.select(articlesTag.categoryTag).text()
+                val articleUrl = elem.select(articlesTag.articleUrlTag).first().attr(Common.HREF_TAG)
+                val title = elem.select(articlesTag.titleTag).text()
+                val date = elem.select(articlesTag.dateTag).text()
+                val categoryUrl = elem.select(articlesTag.categoryTag).first().attr(Common.HREF_TAG)
+                val imageUrl = elem.select(articlesTag.imageTag).attr(Common.SRC_TAG)
+                val summary = elem.select(articlesTag.summaryTag).text()
+
+                //mCategorySet.add(category)
+                articleList.add(Article(i, category, title, date, url+categoryUrl, url+articleUrl, imageUrl, summary))
+            }
+
+        } catch (e: IOException) {
+            // HttpUrlConnection will throw an IOException if any 4XX
+            // response is sent. If we request the status again, this
+            // time the internal status will be properly set, and we'll be
+            // able to retrieve it.
+            Log.e(Common.MY_TAG, "Jsoup connection has error: $e")
+        }
+
+        return articleList
+    }
+
+
 
     private fun printList() {
         if(mCategoryList.size != 0) {
