@@ -22,7 +22,6 @@ import com.kakaroo.blogviewer.databinding.ActivityMainBinding
 import com.kakaroo.blogviewer.entity.Article
 import com.kakaroo.blogviewer.entity.ArticlesTag
 import com.kakaroo.blogviewer.entity.Category
-import com.kakaroo.blogviewer.html.JSoupParser
 import com.kakaroo.blogviewer.utility.Common
 import com.kakaroo.blogviewer.utility.MyUtility
 import kotlinx.coroutines.*
@@ -143,19 +142,19 @@ class MainActivity : AppCompatActivity() {
                         hideKeyboard()  //키보드를 내린다.
                         //binding.etKeyword.setText("")   //Editor를 지운다.
 
-                        val articleTag = mPref.getString("article_tag_key", Common.SELECTOR_ARTICLE_SYNTAX) ?: Common.SELECTOR_ARTICLE_SYNTAX
-                        val categoryTag = mPref.getString("category_tag_key", Common.SELECTOR_CATEGORY_SYNTAX) ?: Common.SELECTOR_CATEGORY_SYNTAX
-                        val articleUrlTag = mPref.getString("articleLink_tag_key", Common.SELECTOR_ARTICLUEURL_SYNTAX) ?: Common.SELECTOR_ARTICLUEURL_SYNTAX
-                        val titleTag = mPref.getString("title_tag_key", Common.SELECTOR_TITLE_SYNTAX) ?: Common.SELECTOR_TITLE_SYNTAX
-                        val dateTag = mPref.getString("date_tag_key", Common.SELECTOR_DATE_SYNTAX) ?: Common.SELECTOR_DATE_SYNTAX
-                        val imageTag = mPref.getString("image_tag_key", Common.SELECTOR_IMAGE_SYNTAX) ?: Common.SELECTOR_IMAGE_SYNTAX
-                        val summaryTag = mPref.getString("summary_tag_key", Common.SELECTOR_SUMMARY_SYNTAX) ?: Common.SELECTOR_SUMMARY_SYNTAX
-                        val pageMaxNum = mPref.getString("page_max_num_key", Common.MAX_PAGE_NUM.toString()) ?: Common.MAX_PAGE_NUM.toString()
+                        val articleTag = mPref.getString(Common.PREF_KEY_ARTICLE_TAG, Common.SELECTOR_ARTICLE_SYNTAX) ?: Common.SELECTOR_ARTICLE_SYNTAX
+                        val categoryTag = mPref.getString(Common.PREF_KEY_CATEGORY_TAG, Common.SELECTOR_CATEGORY_SYNTAX) ?: Common.SELECTOR_CATEGORY_SYNTAX
+                        val articleLinkTag = mPref.getString(Common.PREF_KEY_ARTICLE_LINK_TAG, Common.SELECTOR_ARTICLE_URL_SYNTAX) ?: Common.SELECTOR_ARTICLE_URL_SYNTAX
+                        val titleTag = mPref.getString(Common.PREF_KEY_TITLE_TAG, Common.SELECTOR_TITLE_SYNTAX) ?: Common.SELECTOR_TITLE_SYNTAX
+                        val dateTag = mPref.getString(Common.PREF_KEY_DATE_TAG, Common.SELECTOR_DATE_SYNTAX) ?: Common.SELECTOR_DATE_SYNTAX
+                        val imageTag = mPref.getString(Common.PREF_KEY_IMAGE_TAG, Common.SELECTOR_IMAGE_SYNTAX) ?: Common.SELECTOR_IMAGE_SYNTAX
+                        val summaryTag = mPref.getString(Common.PREF_KEY_SUMMARY_TAG, Common.SELECTOR_SUMMARY_SYNTAX) ?: Common.SELECTOR_SUMMARY_SYNTAX
+                        val pageMaxNum = mPref.getString(Common.PREF_KEY_PAGE_MAX_NUM, Common.MAX_PAGE_NUM.toString()) ?: Common.MAX_PAGE_NUM.toString()
                         val pageMaxNumInt = pageMaxNum.toInt()
 
-                        val articlesTag = ArticlesTag(articleTag, categoryTag, articleUrlTag, titleTag, dateTag, imageTag, summaryTag)
+                        val articlesTag = ArticlesTag(articleTag, categoryTag, articleLinkTag, titleTag, dateTag, imageTag, summaryTag)
 
-                        val url = mPref.getString("blog_url_key", Common.BLOG_MAIN_URL) ?: Common.BLOG_MAIN_URL
+                        val url = mPref.getString(Common.PREF_KEY_INPUT_URL, Common.BLOG_MAIN_URL) ?: Common.BLOG_MAIN_URL
 
                         var bComplete = if(searchType == Common.EditorInputType.NONE) false else true
                         var pageIndex = 0
@@ -191,23 +190,27 @@ class MainActivity : AppCompatActivity() {
                                         asyncTryCnt--
                                         mArticleList.addAll(result)
 
-                                        mArticleList.sortWith(compareByDescending<Article> {it.date})
+                                        Log.e(Common.MY_TAG, "Debug::asyncTryCnt[$asyncTryCnt]")
 
-                                        if(searchType == Common.EditorInputType.NONE)
-                                            mCategoryList.clear()
+                                        //완료시점에만 collection을 수정하자!!
+                                        //그렇지 않으면 index가 없는 부분에 접근하다가 java.util.ConcurrentModificationException 가 발생한다!!
+                                        if(asyncTryCnt == 0) {
+                                            mArticleList.sortWith(compareByDescending<Article> {it.date})
 
-                                        val mapList = mArticleList.groupBy { it.categoryName }
-                                        //Log.i(Common.MY_TAG, mapList.toString())
+                                            if(searchType == Common.EditorInputType.NONE)
+                                                mCategoryList.clear()
 
-                                        mapList.forEach{ item -> mCategoryList.add(Category(item.key,
-                                            item.value as ArrayList<Article>
-                                        ))}
+                                            val mapList = mArticleList.groupBy { it.categoryName }
+
+                                            mapList.forEach{ item -> mCategoryList.add(Category(item.key,
+                                                item.value as ArrayList<Article>
+                                            ))}
+                                        }
 
                                         withContext(Dispatchers.Main) {
-                                            mAdapter.notifyDataSetChanged()
-
                                             if(asyncTryCnt == 0) {
-                                                Log.d(Common.MY_TAG, "btSearch is enabled")
+                                                mAdapter.notifyDataSetChanged()
+                                                Log.d(Common.MY_TAG, "CoroutineScope is completed")
                                                 binding.btSearch.isEnabled = true
                                             }
 
@@ -302,13 +305,20 @@ class MainActivity : AppCompatActivity() {
 
             val contentElements: Elements = doc.select(articlesTag.articleTag)
             for ((i, elem) in contentElements.withIndex()) {
-                val category = elem.select(articlesTag.categoryTag).text()
-                val articleUrl = elem.select(articlesTag.articleUrlTag).first().attr(Common.HREF_TAG)
-                val title = elem.select(articlesTag.titleTag).text()
-                val date = elem.select(articlesTag.dateTag).text()
-                val categoryUrl = elem.select(articlesTag.categoryTag).first().attr(Common.HREF_TAG)
-                val imageUrl = elem.select(articlesTag.imageTag).attr(Common.SRC_TAG)
-                val summary = elem.select(articlesTag.summaryTag).text()
+                val category = elem.select(articlesTag.categoryTag)?.text() ?: ""
+                val articleUrl = elem.select(articlesTag.articleUrlTag)?.attr(Common.HREF_TAG) ?: ""
+                val title = elem.select(articlesTag.titleTag)?.text() ?: ""
+                val date = elem.select(articlesTag.dateTag)?.text() ?: ""
+                val categoryUrl = elem.select(articlesTag.categoryTag)?.attr(Common.HREF_TAG) ?: ""
+                var imageUrl = elem.select(articlesTag.imageTag)?.attr(Common.SRC_TAG) ?: ""
+                if(imageUrl.isNotEmpty()) {
+                    val subIdx1 = imageUrl.indexOf("https://")
+                    val subIdx2 = imageUrl.indexOf("http://")
+                    imageUrl = if (subIdx1 != -1) imageUrl.substring(subIdx1) else {
+                        if(subIdx2 != -1) imageUrl.substring(subIdx2) else imageUrl
+                    }
+                }
+                val summary = elem.select(articlesTag.summaryTag)?.text() ?: ""
 
                 //mCategorySet.add(category)
                 articleList.add(Article(i, category, title, date, url+categoryUrl, url+articleUrl, imageUrl, summary))
@@ -337,7 +347,7 @@ class MainActivity : AppCompatActivity() {
         binding.tvResult.text = "${key}에 관련된 ${size}개의 기사를 찾았습니다."
     }*/
 
-    private fun isNumber(str: String) = !(str.toIntOrNull() == null)
+    private fun isNumber(str: String) = str.toIntOrNull() != null
 
     private fun checkInternetPermissions() {
         val permissionResult = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.INTERNET)

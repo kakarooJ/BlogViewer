@@ -28,7 +28,7 @@
                             android:id="@+id/iv_thumb"
                             android:layout_width="70dp"
                             android:layout_height="60dp"
-                            android:src="@drawable/news_thumb_jpg"/>
+                            android:src="@drawable/img_thumb"/>
 
                         <LinearLayout
                             android:orientation="vertical"

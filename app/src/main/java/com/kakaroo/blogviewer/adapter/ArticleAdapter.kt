@@ -51,7 +51,7 @@ class ArticleAdapter(private val context: Context, private val listData: ArrayLi
         private val tvSummary: TextView = itemView.findViewById(R.id.tv_summary)
 
         fun setItem(article: Article) {
-            val imgName = if(article.imgUrl == "") R.drawable.news_thumb_jpg else article.imgUrl
+            val imgName = if(article.imgUrl == "") R.drawable.img_thumb else article.imgUrl
 
             Glide
                 .with(itemView.context)

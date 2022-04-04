@@ -13,6 +13,16 @@
     <!-- keyword Preferences -->
     <string name="blog_url">URL</string>
 
+    <!-- key Preferences -->
+    <string name="pref_key_input_url">url_input_key</string>
+    <string name="pref_key_article_tag">article_tag_key</string>
+    <string name="pref_key_category_tag">category_tag_key</string>
+    <string name="pref_key_articleLink_tag">articleLink_tag_key</string>
+    <string name="pref_key_title_tag">title_tag_key</string>
+    <string name="pref_key_date_tag">date_tag_key</string>
+    <string name="pref_key_image_tag">image_tag_key</string>
+    <string name="pref_key_summary_tag">summary_tag_key</string>
+
     <!-- tag Preferences -->
     <string name="article_tag_name">main article tag</string>
     <string name="category_tag_name">category tag</string>
