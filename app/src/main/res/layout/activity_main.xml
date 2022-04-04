@@ -34,18 +34,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/et_keyword" />
 
-<!--    <TextView
+    <TextView
         android:id="@+id/tv_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:textSize="12sp"
         android:ellipsize="start"
+        android:singleLine="true"
+        android:text="@string/searching_posting"
+        android:textAlignment="center"
+        android:textColor="@color/purple_700"
+        android:textSize="14sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/et_keyword"
-        app:layout_constraintTop_toBottomOf="@+id/et_keyword"
-        android:singleLine="true" />
--->
+        app:layout_constraintTop_toBottomOf="@+id/et_keyword" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"

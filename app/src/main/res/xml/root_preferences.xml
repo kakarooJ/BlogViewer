@@ -6,7 +6,7 @@
         app:key="url_category_key">
 
         <EditTextPreference
-            app:key="url_input_key"
+            app:key="@string/pref_key_input_url"
             app:title="@string/blog_url"
             app:useSimpleSummaryProvider="false"
             app:summary=""
@@ -19,49 +19,49 @@
         app:key="tag_category_key">
 
         <EditTextPreference
-            app:key="article_tag_key"
+            app:key="@string/pref_key_article_tag"
             app:title="@string/article_tag_name"
             app:useSimpleSummaryProvider="false"
             app:summary="article"
             app:iconSpaceReserved="false"/>
 
         <EditTextPreference
-            app:key="category_tag_key"
+            app:key="@string/pref_key_category_tag"
             app:title="@string/category_tag_name"
             app:useSimpleSummaryProvider="false"
             app:summary="a.link-category"
             app:iconSpaceReserved="false"/>
 
         <EditTextPreference
-            app:key="articleLink_tag_key"
+            app:key="@string/pref_key_articleLink_tag"
             app:title="@string/link_tag_name"
             app:useSimpleSummaryProvider="false"
             app:summary="a.link-article"
             app:iconSpaceReserved="false"/>
 
         <EditTextPreference
-            app:key="title_tag_key"
+            app:key="@string/pref_key_title_tag"
             app:title="@string/title_tag_name"
             app:useSimpleSummaryProvider="false"
             app:summary=".title"
             app:iconSpaceReserved="false"/>
 
         <EditTextPreference
-            app:key="date_tag_key"
+            app:key="@string/pref_key_date_tag"
             app:title="@string/date_tag_name"
             app:useSimpleSummaryProvider="false"
             app:summary=".date"
             app:iconSpaceReserved="false"/>
 
         <EditTextPreference
-            app:key="image_tag_key"
+            app:key="@string/pref_key_image_tag"
             app:title="@string/image_tag_name"
             app:useSimpleSummaryProvider="false"
             app:summary="img.img-thumbnail"
             app:iconSpaceReserved="false"/>
 
         <EditTextPreference
-            app:key="summary_tag_key"
+            app:key="@string/pref_key_summary_tag"
             app:title="@string/summary_tag_name"
             app:useSimpleSummaryProvider="false"
             app:summary=".summary"

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Blog Viewer</string>
+    <string name="searching_posting">포스팅 검색중입니다.</string>
     <string name="setting">설정</string>
     <string name="reset_list">검색결과 지움</string>
     <string name="title_activity_settings">설정</string>
@@ -12,6 +13,16 @@
 
     <!-- keyword Preferences -->
     <string name="blog_url">URL</string>
+
+    <!-- key Preferences -->
+    <string name="pref_key_input_url">url_input_key</string>
+    <string name="pref_key_article_tag">article_tag_key</string>
+    <string name="pref_key_category_tag">category_tag_key</string>
+    <string name="pref_key_articleLink_tag">articleLink_tag_key</string>
+    <string name="pref_key_title_tag">title_tag_key</string>
+    <string name="pref_key_date_tag">date_tag_key</string>
+    <string name="pref_key_image_tag">image_tag_key</string>
+    <string name="pref_key_summary_tag">summary_tag_key</string>
 
     <!-- tag Preferences -->
     <string name="article_tag_name">main article tag</string>
