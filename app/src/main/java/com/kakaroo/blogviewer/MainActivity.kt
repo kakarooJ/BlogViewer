@@ -198,6 +198,7 @@ class MainActivity : AppCompatActivity() {
                                         val result = asyncFetchElement(url, uriTag, articlesTag, dispatcher).await()
                                         mArticleList.addAll(result)
 
+<<<<<<< HEAD
                                         //feeds는 url list로 되었을 때는 아래와 같이 처리
                                         /*
                                         var requests = mutableListOf<Deferred<List<Article>>>()
@@ -222,6 +223,18 @@ class MainActivity : AppCompatActivity() {
                                             if(searchType == Common.EditorInputType.NONE)
                                                 mCategoryList.clear()
 
+=======
+                                        Log.e(Common.MY_TAG, "Debug::asyncTryCnt[$asyncTryCnt]")
+
+                                        //완료시점에만 collection을 수정하자!!
+                                        //그렇지 않으면 index가 없는 부분에 접근하다가 java.util.ConcurrentModificationException 가 발생한다!!
+                                        if(asyncTryCnt == 0) {
+                                            mArticleList.sortWith(compareByDescending<Article> {it.date})
+
+                                            if(searchType == Common.EditorInputType.NONE)
+                                                mCategoryList.clear()
+
+>>>>>>> 84b7241325dac3a18bb9b62dc08bf4f4121bb3f1
                                             val mapList = mArticleList.groupBy { it.categoryName }
 
                                             mapList.forEach{ item -> mCategoryList.add(Category(item.key,
@@ -230,11 +243,17 @@ class MainActivity : AppCompatActivity() {
                                         }
 
                                         withContext(Dispatchers.Main) {
+<<<<<<< HEAD
                                             mAdapter.notifyDataSetChanged()
                                             if(asyncTryCnt == 0) {
                                                 mAdapter.notifyDataSetChanged()
                                                 val endTime = System.currentTimeMillis()
                                                 Log.d(Common.MY_TAG, "CoroutineScope is completed : ${endTime-startTime}")
+=======
+                                            if(asyncTryCnt == 0) {
+                                                mAdapter.notifyDataSetChanged()
+                                                Log.d(Common.MY_TAG, "CoroutineScope is completed")
+>>>>>>> 84b7241325dac3a18bb9b62dc08bf4f4121bb3f1
                                                 binding.btSearch.isEnabled = true
                                                 updateTextView(View.INVISIBLE)
                                             }
@@ -344,6 +363,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 val summary = elem.select(articlesTag.summaryTag)?.text() ?: ""
+<<<<<<< HEAD
 
                 //mCategorySet.add(category)
                 articleList.add(Article(i, category, title, date, url+categoryUrl, url+articleUrl, imageUrl, summary))
@@ -390,6 +410,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 val summary = elem.select(articlesTag.summaryTag)?.text() ?: ""
+=======
+>>>>>>> 84b7241325dac3a18bb9b62dc08bf4f4121bb3f1
 
                 //mCategorySet.add(category)
                 articleList.add(Article(i, category, title, date, url+categoryUrl, url+articleUrl, imageUrl, summary))
