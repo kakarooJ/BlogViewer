@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Blog Viewer</string>
     <string name="searching_posting">포스팅 검색중입니다.</string>
+    <string name="textview_result">https://kakaroo.tistroy.com</string>
     <string name="setting">설정</string>
     <string name="reset_list">검색결과 지움</string>
     <string name="title_activity_settings">설정</string>

@@ -3,7 +3,6 @@ package com.kakaroo.blogviewer.utility
 object Common {
     const val MY_TAG                  =   "kakaroo-blogViewer"
 
-    const val BLOG_MAIN_URL           =   "https://kakaroo.tistory.com"
     const val SEARCH_TAG              =   "/search/"
     const val PAGE_TAG                =   "/?page="
     const val CATEGORY_TAG            =   "/category/"
@@ -12,16 +11,8 @@ object Common {
 
 
     //default value
-    /*
-    const val BLOG_MAIN_URL           =   "https://youngest-programming.tistory.com"
-    const val SELECTOR_ARTICLE_SYNTAX     =   "div.list_content"//<article ....  /article>
-    const val SELECTOR_CATEGORY_SYNTAX    =   "a.link_cate"   //<a href="/category/Kotlin" class="link-category">Kotlin</a>
-    const val SELECTOR_ARTICLE_URL_SYNTAX =   "a.link_post"    //<a href="/69" class="link-article">, attr="href"
-    const val SELECTOR_TITLE_SYNTAX       =   ".tit_post"
-    const val SELECTOR_DATE_SYNTAX       =   ".txt_date"
-    const val SELECTOR_IMAGE_SYNTAX       =   "img"//<img src="https://...png" class="img-thumbnail", attr="src"
-    const val SELECTOR_SUMMARY_SYNTAX     =   "p.txt_post"  //<p class="summary">*/
 
+    const val BLOG_MAIN_URL           =   "https://kakaroo.tistory.com"
     const val SELECTOR_ARTICLE_SYNTAX     =   "article"//<article ....  /article>
     const val SELECTOR_CATEGORY_SYNTAX    =   "a.link-category"   //<a href="/category/Kotlin" class="link-category">Kotlin</a>
     const val SELECTOR_ARTICLE_URL_SYNTAX =   "a.link-article"    //<a href="/69" class="link-article">
@@ -29,7 +20,16 @@ object Common {
     const val SELECTOR_DATE_SYNTAX       =   ".date"
     const val SELECTOR_IMAGE_SYNTAX       =   "img.img-thumbnail"//"img[src\$=.png]"  //<img src="https://...png" class="img-thumbnail"
     const val SELECTOR_SUMMARY_SYNTAX     =   ".summary"  //<p class="summary">
-
+/*
+    const val BLOG_MAIN_URL           =   "https://youngest-programming.tistory.com"
+    const val SELECTOR_ARTICLE_SYNTAX     =   "div.list_content"//<article ....  /article>
+    const val SELECTOR_CATEGORY_SYNTAX    =   "a.link_cate"   //<a href="/category/Kotlin" class="link-category">Kotlin</a>
+    const val SELECTOR_ARTICLE_URL_SYNTAX =   "a.link_post"    //<a href="/69" class="link-article">, attr="href"
+    const val SELECTOR_TITLE_SYNTAX       =   ".tit_post"
+    const val SELECTOR_DATE_SYNTAX       =   ".txt_date"
+    const val SELECTOR_IMAGE_SYNTAX       =   "img"//<img src="https://...png" class="img-thumbnail", attr="src"
+    const val SELECTOR_SUMMARY_SYNTAX     =   "p.txt_post"  //<p class="summary">
+*/
     const val COROUTINE_THREAD_POOL_NUM     = 8
 
     const val ARTICLE_URL       = 0
