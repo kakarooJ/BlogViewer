@@ -109,6 +109,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.reset_list -> {
                 mCategoryList.clear()
+                updateTextView("", View.GONE)
                 mAdapter.notifyDataSetChanged()
             }
         }
@@ -332,7 +333,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun asyncFetchElement(url: String, uriTag: String, articlesTag: ArticlesTag,
-                                  dispatcher: CoroutineDispatcher) = GlobalScope.async(dispatcher) {
+                                  dispatcher: CoroutineDispatcher) = CoroutineScope(Dispatchers.IO).async(dispatcher) {
         var articleList = ArrayList<Article>()
 
         try {

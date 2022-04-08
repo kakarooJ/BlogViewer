@@ -57,4 +57,7 @@ dependencies {
     //글라이드는 안드로이드에서 이미지를 빠르고 효율적으로 불러올 수 있게 도와주는 라이브러리
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //image view 확대
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
 }

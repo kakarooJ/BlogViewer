@@ -1,13 +1,20 @@
 package com.kakaroo.blogviewer
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.*
+import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.kakaroo.blogviewer.utility.Common
 
 class SettingsActivity : AppCompatActivity() {
+
+    lateinit var mDialog : Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,13 +26,48 @@ class SettingsActivity : AppCompatActivity() {
                 .commit()
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        configureDialog()
     }
 
+    private fun configureDialog() {
+        mDialog = Dialog(this)
+        mDialog.setContentView(R.layout.custom_dialog)
+
+        val window: Window? = mDialog.window
+        if (window != null) {
+            // 백그라운드 투명
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val params: WindowManager.LayoutParams = window.attributes
+            // 화면에 가득 차도록
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.MATCH_PARENT
+
+            // 열기&닫기 시 애니메이션 설정
+            params.windowAnimations = R.style.AnimationPopupStyle
+            window.attributes = params
+            // UI 하단 정렬
+            window.setGravity(Gravity.BOTTOM)
+        }
+
+        //Image zoom in-out
+        val imageView: SubsamplingScaleImageView = mDialog.findViewById(R.id.imgView_Hint)
+        imageView.setImage(ImageSource.resource(R.drawable.settings_hint))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.settings_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
+            }
+            R.id.btn_hint -> {
+                mDialog.show()
+                true
             }
         }
         return super.onOptionsItemSelected(item)
@@ -34,7 +76,6 @@ class SettingsActivity : AppCompatActivity() {
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
-
 
             setEditTextPreference(Common.PREF_KEY_INPUT_URL, Common.BLOG_MAIN_URL)
             setEditTextPreference(Common.PREF_KEY_ARTICLE_TAG, Common.SELECTOR_ARTICLE_SYNTAX)

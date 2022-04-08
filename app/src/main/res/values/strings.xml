@@ -3,9 +3,14 @@
     <string name="searching_posting">포스팅 검색중입니다.</string>
     <string name="textview_result">https://kakaroo.tistroy.com</string>
     <string name="setting">설정</string>
-    <string name="reset_list">검색결과 지움</string>
+    <string name="reset_list">리셋</string>
+    <string name="hint">도움말</string>
     <string name="title_activity_settings">설정</string>
     <string name="editor_text">PageNo or 검색어</string>
+
+    <!-- Settings Hint -->
+    <string name="hint1_text">1. Blog web page에서 HTML이 어떻게 구성되어 있는지 소스보기로 확인.</string>
+    <string name="hint2_text">2. 읽어올 태그들을 찾아 입력. (문법은 JSoup을 따른다. 예> class는 앞에 "." 을 붙인다)</string>
 
     <!-- Preference Titles -->
     <string name="category_header">URL 카테고리</string>
@@ -32,7 +37,7 @@
     <string name="title_tag_name">title tag</string>
     <string name="date_tag_name">date tag</string>
     <string name="image_tag_name">image tag</string>
-    <string name="summary_tag_name">summary tag</string>
+    <string name="summary_tag_name">content tag</string>
 
     <string name="article_maxnum">가져올 PAGE 최대 수</string>
 
