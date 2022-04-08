@@ -41,13 +41,13 @@ class SettingsActivity : AppCompatActivity() {
             val params: WindowManager.LayoutParams = window.attributes
             // 화면에 가득 차도록
             params.width = WindowManager.LayoutParams.MATCH_PARENT
-            params.height = WindowManager.LayoutParams.MATCH_PARENT
+            //params.height = WindowManager.LayoutParams.MATCH_PARENT
 
             // 열기&닫기 시 애니메이션 설정
             params.windowAnimations = R.style.AnimationPopupStyle
             window.attributes = params
             // UI 하단 정렬
-            window.setGravity(Gravity.BOTTOM)
+            window.setGravity(Gravity.CENTER)
         }
 
         //Image zoom in-out
