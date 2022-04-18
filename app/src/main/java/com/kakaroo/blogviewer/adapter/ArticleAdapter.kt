@@ -10,16 +10,11 @@ import com.kakaroo.blogviewer.entity.Article
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import android.view.RoundedCorner
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.kakaroo.blogviewer.R
-import com.kakaroo.blogviewer.utility.Common
 
 class ArticleAdapter(private val context: Context, private val listData: ArrayList<Article>?)
     : RecyclerView.Adapter<ArticleAdapter.CustomViewHolder>() {
@@ -30,7 +25,7 @@ class ArticleAdapter(private val context: Context, private val listData: ArrayLi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.article_item_recycler, parent, false)
+            .inflate(R.layout.article_item_cardview, parent, false)
 
         return CustomViewHolder(view).apply {}
     }
